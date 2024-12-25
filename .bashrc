@@ -157,3 +157,4 @@ function funcs() {
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
+alias sbt-lila='sbt run -Dcsrf.origin=http://localhost:9663'
