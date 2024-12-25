@@ -150,6 +150,10 @@ function reset-author() {
 
     git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase -f "$1"~
 }
+function funcs() {
+    echo "functions defined in .bashrc:"
+    grep -E '^[a-zA-Z_][a-zA-Z0-9_]* *\(\)|^function [a-zA-Z_][a-zA-Z0-9_]*' ~/.bashrc | sed -E 's/[[:space:]]*\{.*$//; s/^[[:space:]]*function[[:space:]]+//; s/[[:space:]]*\(\)//'
+}
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
