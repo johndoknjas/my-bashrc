@@ -136,6 +136,20 @@ function commit_date { git show -s --format=%ci "$1"; }
 function git_log_dates { git log --oneline --format=%ci; }
 function my_grep { grep -Rin "$1" .; }
 function my_grep_just_files { grep -Ril "$1" .; }
+function reset-author() {
+    if [ -z "$1" ]; then
+        echo "Usage: enter the oldest commit to reset the author for."
+        return 1;
+    fi
+
+    merge_commits=$(git rev-list --merges "$1"~..HEAD)
+    if [ -n "$merge_commits" ]; then
+        echo "Error: There are merge commits in the range $1 to HEAD."
+        return 1;
+    fi
+
+    git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase -f "$1"~
+}
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
