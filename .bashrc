@@ -156,6 +156,7 @@ function reset-author() {
 }
 function recent-branches() { git branch -v --sort=-committerdate; }
 function tmux-kill() { pkill -f tmux; }
+function my-prettier() { prettier --write .; }
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
