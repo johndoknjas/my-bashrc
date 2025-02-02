@@ -132,7 +132,7 @@ export PYTHONPATH
 
 export PATH=$PATH:/usr/bin
 
-function funcs() {
+function funcs {
     echo "functions defined in .bashrc:"
     grep -E '^[a-zA-Z_][a-zA-Z0-9_]* *\(\)|^function [a-zA-Z_][a-zA-Z0-9_]*' ~/.bashrc | sed -E 's/[[:space:]]*\{.*$//; s/^[[:space:]]*function[[:space:]]+//; s/[[:space:]]*\(\)//'
 }
@@ -140,7 +140,7 @@ function commit_date { git show -s --format=%ci "$1"; }
 function git_log_dates { git log --oneline --format=%ci; }
 function my_grep { grep -Rin "$1" .; }
 function my_grep_just_files { grep -Ril "$1" .; }
-function reset-author() {
+function reset-author {
     if [ -z "$1" ]; then
         echo "Usage: enter the oldest commit to reset the author for."
         return 1;
@@ -154,9 +154,17 @@ function reset-author() {
 
     git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase -f "$1"~
 }
-function recent-branches() { git branch -v --sort=-committerdate; }
-function tmux-kill() { pkill -f tmux; }
-function my-prettier() { prettier --write .; }
+function recent-branches { git branch -v --sort=-committerdate; }
+function tmux-kill { pkill -f tmux; }
+function my-prettier { prettier --write .; }
+function grep-past-commands {
+    if [ $# -ge 1 ]
+    then
+        history | grep "$1";
+    else
+        history;
+    fi
+}
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
