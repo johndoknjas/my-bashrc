@@ -155,7 +155,7 @@ function reset-author {
     git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase -f "$1"~
 }
 function recent-branches { git branch -v --sort=-committerdate; }
-function tmux-kill { pkill -f tmux; }
+function tmux-kill { tmux kill-server; }
 function my-prettier { prettier --write .; }
 function grep-past-commands {
     if [ $# -ge 1 ]
