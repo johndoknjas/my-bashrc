@@ -165,6 +165,9 @@ function grep-past-commands {
         history;
     fi
 }
+function diff-commit-file {
+    git diff $1 *$2
+}
 
 alias python='/usr/local/bin/python3.12'
 alias pip='python3 -m pip'
