@@ -132,6 +132,10 @@ export PYTHONPATH
 
 export PATH=$PATH:/usr/bin
 
+alias python='/usr/local/bin/python3.12'
+alias pip='python3 -m pip'
+alias sbt-lila='sbt run -Dcsrf.origin=http://localhost:9663'
+
 function funcs {
     echo "functions defined in .bashrc:"
     grep -E '^[a-zA-Z_][a-zA-Z0-9_]* *\(\)|^function [a-zA-Z_][a-zA-Z0-9_]*' ~/.bashrc | sed -E 's/[[:space:]]*\{.*$//; s/^[[:space:]]*function[[:space:]]+//; s/[[:space:]]*\(\)//'
@@ -168,7 +172,3 @@ function grep-past-commands {
 function diff-commit-file {
     git diff $1 *$2
 }
-
-alias python='/usr/local/bin/python3.12'
-alias pip='python3 -m pip'
-alias sbt-lila='sbt run -Dcsrf.origin=http://localhost:9663'
