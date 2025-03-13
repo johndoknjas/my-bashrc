@@ -140,10 +140,10 @@ function funcs {
     echo "functions defined in .bashrc:"
     grep -E '^[a-zA-Z_][a-zA-Z0-9_]* *\(\)|^function [a-zA-Z_][a-zA-Z0-9_]*' ~/.bashrc | sed -E 's/[[:space:]]*\{.*$//; s/^[[:space:]]*function[[:space:]]+//; s/[[:space:]]*\(\)//'
 }
-function commit_date { git show -s --format=%ci "$1"; }
-function git_log_dates { git log --oneline --format=%ci; }
-function my_grep { grep -Rin "$1" .; }
-function my_grep_just_files { grep -Ril "$1" .; }
+function commit-date { git show -s --format=%ci "$1"; }
+function git-log-dates { git log --oneline --format=%ci; }
+function my-grep { grep -Rin "$1" .; }
+function my-grep-just-files { grep -Ril "$1" .; }
 function reset-author {
     if [ -z "$1" ]; then
         echo "Usage: enter the oldest commit to reset the author for."
