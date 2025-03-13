@@ -172,3 +172,7 @@ function grep-past-commands {
 function diff-commit-file {
     git diff $1 *$2
 }
+function copy {
+    "$@" | xclip -selection clipboard
+    echo "Copied to clipboard!"
+}
