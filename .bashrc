@@ -176,3 +176,14 @@ function copy {
     "$@" | xclip -selection clipboard
     echo "Copied to clipboard!"
 }
+function tar-curr-dir {
+    if [ -z "$1" ]; then
+        echo "Usage: Enter the name you want for the archive, ending in .tar.gz"
+        return 1;
+    elif [[ "$1" != *.tar.gz ]]; then
+        echo "The filename should end in .tar.gz"
+        return 1;
+    else
+        tar -cvz -f $1 .
+    fi
+}
