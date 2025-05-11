@@ -178,12 +178,14 @@ function copy {
 }
 function tar-curr-dir {
     if [ -z "$1" ]; then
-        echo "Usage: Enter the name you want for the archive, ending in .tar.gz"
-        return 1;
+        echo "Usage: tar-curr-dir <archive-name.tar.gz> [--exclude pattern1 --exclude pattern2 ...]"
+        return 1
     elif [[ "$1" != *.tar.gz ]]; then
         echo "The filename should end in .tar.gz"
-        return 1;
+        return 1
     else
-        tar -cvz -f $1 .
+        archive_name="$1"
+        shift
+        tar -cvzf "$archive_name" --exclude="$archive_name" "$@" .
     fi
 }
