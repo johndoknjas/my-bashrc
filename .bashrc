@@ -189,3 +189,7 @@ function tar-curr-dir {
         tar -cvzf "$archive_name" --exclude="$archive_name" "$@" .
     fi
 }
+function tar-curr-dir-light {
+    echo "Creating archive $1, excluding node_modules and .git..."
+    tar-curr-dir "$1" --exclude='node_modules' --exclude='*/node_modules' --exclude='.git'
+}
