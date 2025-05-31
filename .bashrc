@@ -191,5 +191,8 @@ function tar-curr-dir {
 }
 function tar-curr-dir-light {
     echo "Creating archive $1, excluding node_modules and .git..."
-    tar-curr-dir "$1" --exclude='node_modules' --exclude='*/node_modules' --exclude='.git'
+    tar-curr-dir "$1" --exclude='node_modules' --exclude='.git' --exclude='.bloop' \
+                      --exclude='compiled' --exclude='npm' --exclude='target' \
+                      --exclude='.metals' --exclude='bin' --exclude='public' \
+                      --exclude='logs'
 }
