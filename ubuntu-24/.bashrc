@@ -119,3 +119,13 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+start-lila() {
+  local START_DIR_FILE="${TMPDIR:-/tmp}/lichess-start-dir"
+  printf '%s\n' "$PWD" > "$START_DIR_FILE"
+
+  lsof -ti tcp:6379 | xargs -r kill -9 2>/dev/null || true
+  lsof -ti tcp:27017 | xargs -r kill -9 2>/dev/null || true
+
+  ~/lichess/init-lichess-dev.sh
+}
