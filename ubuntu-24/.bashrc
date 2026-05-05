@@ -129,3 +129,64 @@ start-lila() {
 
   ~/lichess/init-lichess-dev.sh
 }
+
+function funcs {
+    echo "functions defined in .bashrc:"
+    grep -E '^[a-zA-Z_][a-zA-Z0-9_]* *\(\)|^function [a-zA-Z_][a-zA-Z0-9_]*' ~/.bashrc | sed -E 's/[[:space:]]*\{.*$//; s/^[[:space:]]*function[[:space:]]+//; s/[[:space:]]*\(\)//'
+}
+function commit-date { git show -s --format=%ci "$1"; }
+function git-log-dates { git log --oneline --format=%ci; }
+function my-grep { grep -Rin "$1" .; }
+function my-grep-just-files { grep -Ril "$1" .; }
+function reset-author {
+    if [ -z "$1" ]; then
+        echo "Usage: enter the oldest commit to reset the author for."
+        return 1;
+    fi
+
+    merge_commits=$(git rev-list --merges "$1"~..HEAD)
+    if [ -n "$merge_commits" ]; then
+        echo "Error: There are merge commits in the range $1 to HEAD."
+        return 1;
+    fi
+
+    git -c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE="%cD" GIT_AUTHOR_DATE="%aD" git commit --amend --no-edit --reset-author' rebase -f "$1"~
+}
+function recent-branches { git branch -v --sort=-committerdate; }
+function tmux-kill { tmux kill-server; }
+function my-prettier { prettier --write .; }
+function grep-past-commands {
+    if [ $# -ge 1 ]
+    then
+        history | grep "$1";
+    else
+        history;
+    fi
+}
+function diff-commit-file {
+    git diff $1 *$2
+}
+function copy {
+    "$@" | xclip -selection clipboard
+    echo "Copied to clipboard!"
+}
+function tar-curr-dir {
+    if [ -z "$1" ]; then
+        echo "Usage: tar-curr-dir <archive-name.tar.gz> [--exclude pattern1 --exclude pattern2 ...]"
+        return 1
+    elif [[ "$1" != *.tar.gz ]]; then
+        echo "The filename should end in .tar.gz"
+        return 1
+    else
+        archive_name="$1"
+        shift
+        tar -cvzf "$archive_name" --exclude="$archive_name" "$@" .
+    fi
+}
+function tar-curr-dir-light {
+    echo "Creating archive $1, excluding node_modules and .git..."
+    tar-curr-dir "$1" --exclude='node_modules' --exclude='.git' --exclude='.bloop' \
+                      --exclude='compiled' --exclude='npm' --exclude='target' \
+                      --exclude='.metals' --exclude='bin' --exclude='public' \
+                      --exclude='logs'
+}
