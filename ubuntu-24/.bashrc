@@ -190,3 +190,4 @@ function tar-curr-dir-light {
                       --exclude='.metals' --exclude='bin' --exclude='public' \
                       --exclude='logs'
 }
+export PATH="$PATH:$HOME/.local/share/coursier/bin"
