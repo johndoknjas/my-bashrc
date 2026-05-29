@@ -190,6 +190,13 @@ function tar-curr-dir-light {
                       --exclude='.metals' --exclude='bin' --exclude='public' \
                       --exclude='logs'
 }
+function activate {
+    if [ ! -d ".venv" ]; then
+        echo "No .venv found, making one."
+        python3 -m venv .venv || return
+    fi
+    source .venv/bin/activate
+}
 export PATH="$PATH:$HOME/.local/share/coursier/bin"
 . "$HOME/.cargo/env"
 
