@@ -191,3 +191,7 @@ function tar-curr-dir-light {
                       --exclude='logs'
 }
 export PATH="$PATH:$HOME/.local/share/coursier/bin"
+. "$HOME/.cargo/env"
+
+# Created by `pipx` on 2026-05-25 05:31:02
+export PATH="$PATH:/home/johnd/.local/bin"
