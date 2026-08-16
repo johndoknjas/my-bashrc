@@ -200,14 +200,14 @@ function activate {
 # Open a new Windows Terminal tab in the same window, in the current directory
 # (or in "$1" if given). The WT profile is picked by distro name, since the
 # default profile is PowerShell.
-function newtab {
+function tab {
     if ! command -v wt.exe > /dev/null 2>&1; then
-        echo "newtab: wt.exe not found (needs Windows Terminal)" >&2
+        echo "tab: wt.exe not found (needs Windows Terminal)" >&2
         return 1
     fi
     local dir="${1:-$PWD}"
     if [ ! -d "$dir" ]; then
-        echo "newtab: not a directory: $dir" >&2
+        echo "tab: not a directory: $dir" >&2
         return 1
     fi
     wt.exe -w 0 new-tab -p "${WSL_DISTRO_NAME:-Ubuntu-24.04}" \
