@@ -197,6 +197,47 @@ function activate {
     fi
     source .venv/bin/activate
 }
+function own {
+    local target="${1:-.}"
+    if [ ! -e "$target" ]; then
+        echo "own: no such path: $target" >&2
+        return 1
+    fi
+    local resolved
+    resolved=$(readlink -f -- "$target") || return 1
+
+    # A bare `own` defaults to the cwd, so a failed `cd` is enough to point this
+    # at a system directory. Refuse those outright.
+    case "$resolved" in
+        / | /bin | /boot | /dev | /etc | /home | /lib | /lib32 | /lib64 | /libx32 \
+          | /mnt | /opt | /proc | /root | /run | /sbin | /srv | /sys | /tmp | /usr | /var)
+            echo "own: refusing to recurse over system directory: $resolved" >&2
+            return 1
+            ;;
+    esac
+
+    # Anything not strictly inside $HOME is allowed, but confirm it first.
+    if [[ "$resolved" != "$HOME"/* ]]; then
+        local scope="$resolved (outside $HOME)"
+        [ "$resolved" = "$HOME" ] && scope="all of $HOME"
+        if [ ! -t 0 ]; then
+            echo "own: refusing to recurse over $scope without a tty to confirm" >&2
+            return 1
+        fi
+        local count
+        count=$(find "$resolved" -xdev 2>/dev/null | head -n 100001 | wc -l)
+        [ "$count" -gt 100000 ] && count="100000+"
+        local reply
+        read -r -p "own: about to recurse over $scope -- $count entries. Proceed? [y/N] " reply
+        if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+            echo "own: aborted" >&2
+            return 1
+        fi
+    fi
+
+    # -h so symlinks are retargeted rather than followed out of the tree.
+    sudo chown -Rh "$(id -un):$(id -gn)" -- "$resolved" && chmod -R u+rwX -- "$resolved"
+}
 function tab {
     if ! command -v wt.exe > /dev/null 2>&1; then
         echo "tab: wt.exe not found (needs Windows Terminal)" >&2
