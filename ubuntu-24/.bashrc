@@ -197,21 +197,30 @@ function activate {
     fi
     source .venv/bin/activate
 }
-# Open a new Windows Terminal tab in the same window, in the current directory
-# (or in "$1" if given). The WT profile is picked by distro name, since the
-# default profile is PowerShell.
 function tab {
     if ! command -v wt.exe > /dev/null 2>&1; then
         echo "tab: wt.exe not found (needs Windows Terminal)" >&2
         return 1
+    fi
+    local count=1
+    if [[ "$1" =~ ^[0-9]+$ ]]; then
+        count="$1"
+        shift
+        if [ "$count" -lt 1 ]; then
+            echo "tab: count must be at least 1: $count" >&2
+            return 1
+        fi
     fi
     local dir="${1:-$PWD}"
     if [ ! -d "$dir" ]; then
         echo "tab: not a directory: $dir" >&2
         return 1
     fi
-    wt.exe -w 0 new-tab -p "${WSL_DISTRO_NAME:-Ubuntu-24.04}" \
-                        -d "$(wslpath -w "$dir")" > /dev/null 2>&1
+    local i
+    for ((i = 0; i < count; i++)); do
+        wt.exe -w 0 new-tab -p "${WSL_DISTRO_NAME:-Ubuntu-24.04}" \
+                            -d "$(wslpath -w "$dir")" > /dev/null 2>&1
+    done
 }
 export PATH="$PATH:$HOME/.local/share/coursier/bin"
 . "$HOME/.cargo/env"
