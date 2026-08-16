@@ -197,8 +197,38 @@ function activate {
     fi
     source .venv/bin/activate
 }
+# Open a new Windows Terminal tab in the same window, in the current directory
+# (or in "$1" if given). The WT profile is picked by distro name, since the
+# default profile is PowerShell.
+function newtab {
+    if ! command -v wt.exe > /dev/null 2>&1; then
+        echo "newtab: wt.exe not found (needs Windows Terminal)" >&2
+        return 1
+    fi
+    local dir="${1:-$PWD}"
+    if [ ! -d "$dir" ]; then
+        echo "newtab: not a directory: $dir" >&2
+        return 1
+    fi
+    wt.exe -w 0 new-tab -p "${WSL_DISTRO_NAME:-Ubuntu-24.04}" \
+                        -d "$(wslpath -w "$dir")" > /dev/null 2>&1
+}
 export PATH="$PATH:$HOME/.local/share/coursier/bin"
 . "$HOME/.cargo/env"
 
 # Created by `pipx` on 2026-05-25 05:31:02
 export PATH="$PATH:/home/johnd/.local/bin"
+
+# opencode
+export PATH=/home/johnd/.opencode/bin:$PATH
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$(npm config get prefix)/bin:$PATH"
