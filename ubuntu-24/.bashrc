@@ -170,6 +170,19 @@ function copy {
     "$@" | xclip -selection clipboard
     echo "Copied to clipboard!"
 }
+function cpx {
+    if [ "$#" -lt 2 ]; then
+        echo "Usage: cpx <source> <destination> [destination ...]" >&2
+        return 1
+    fi
+
+    local source="$1" destination status=0
+    shift
+    for destination in "$@"; do
+        cp -- "$source" "$destination" || status=1
+    done
+    return "$status"
+}
 function tar-curr-dir {
     if [ -z "$1" ]; then
         echo "Usage: tar-curr-dir <archive-name.tar.gz> [--exclude pattern1 --exclude pattern2 ...]"
