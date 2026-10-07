@@ -183,6 +183,20 @@ function cpx {
     done
     return "$status"
 }
+function mvx {
+    if [ "$#" -lt 2 ]; then
+        echo "Usage: mvx <source> <destination> [destination ...]" >&2
+        return 1
+    fi
+
+    local source="$1"
+    shift
+    while [ "$#" -gt 1 ]; do
+        cp -a -- "$source" "$1" || return
+        shift
+    done
+    mv -- "$source" "$1"
+}
 function tar-curr-dir {
     if [ -z "$1" ]; then
         echo "Usage: tar-curr-dir <archive-name.tar.gz> [--exclude pattern1 --exclude pattern2 ...]"
